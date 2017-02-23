@@ -154,7 +154,7 @@ def write_class_param_file(cospar,z_arr) :
     f=open(PREFIX_SAVE+"_param.ini","w")
     f.write(strout)
     f.close()
-    os.system("./hi_classt "+PREFIX_SAVE+"_param.ini >> log_class")
+    os.system("./class_mod "+PREFIX_SAVE+"_param.ini >> log_class")
 
     return strout
 
