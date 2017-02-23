@@ -161,7 +161,7 @@ def get_cluster_distribution_qkz(cospar,exper,lth_arr,cov_arr,add_kappa=True) :
 
     return n_arr*(1-blendedfrac)
 
-def get_cluster_distribution_mz(cospar,exper,lth_arr,cov_arr) :
+def get_cluster_distribution_mz(cospar,exper,lth_arr,cov_arr,plot_stuff=False) :
     fsky=exper['fsky']
     nz=exper['nz']
     z_min=exper['z_min']
@@ -220,12 +220,14 @@ def get_cluster_distribution_mz(cospar,exper,lth_arr,cov_arr) :
     th500_mean=np.sum(chi_arr*nm_arr*th500_arr)/np.sum(chi_arr*nm_arr)
     theta_hard=2*max([exper['beam_reduced'],th500_mean])/2.355
     blendedfrac=1-np.exp(-n_persqamin*np.pi*(2*theta_hard)**2)
-
-    print "Average cluster size: %lf"%th500_mean
-    print "Number of clusters : %d"%(int(np.sum(nm_arr*chi_arr*dz*dlm)))
-    print "Blended fraction : %lE"%blendedfrac
     lm_arr=np.log10(m_arr)
-    plotarr(np.log10(chi_arr*nm_arr),"$dN/dzd\\log_{10}M$",lm_arr,z_arr,x_label="$\\log_10 M/(M_\\odot/h)$",
-            y_label="$z$",vmin=0); plt.show()
 
-    return z_arr,lm_arr,chi_arr*nm_arr*(1-blendedfrac)
+    if plot_stuff :
+        print "Average cluster size: %lf"%th500_mean
+        print "Number of clusters : %d"%(int(np.sum(nm_arr*chi_arr*dz*dlm)))
+        print "Blended fraction : %lE"%blendedfrac
+        plotarr(np.log10(chi_arr*nm_arr),"$dN/dzd\\log_{10}M$",lm_arr,z_arr,
+                x_label="$\\log_{10} M/(M_\\odot/h)$",y_label="$z$",vmin=0);
+        plt.show()
+        
+    return z_arr,lm_arr,chi_arr*nm_arr*(1-blendedfrac),pcs

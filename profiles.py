@@ -38,8 +38,18 @@ def fnu_sz(nu,component) : #tSZ
     else : #kSZ
         return np.ones_like(nu)
 
+SV_SIGMA0=312.
+SV_ALPHAS=0.87
+SV_GAMMA0=22.
+SV_ALPHAG=1.05
 def sigma_v(m,z) :
-    return 312.0*(1+z)**0.87+22.0*(1+z)**1.05*np.log10(m*1E-14)
+    sig0=SV_SIGMA0*(1+z)**SV_ALPHAS
+    gam0=SV_GAMMA0*(1+z)**SV_ALPHAG
+    xm=np.log10(m/1E14)
+    return sig0-gam0*xm
+
+#def sigma_v(m,z) :
+#    return 312.0*(1+z)**0.87+22.0*(1+z)**1.05*np.log10(m*1E-14)
 
 #Virial radius
 def r_500(m,z,pcs) :
@@ -139,6 +149,7 @@ def norm_cylind(comp,nr) :
 #Compute arrays of Fourier-space profiles
 def compute_fourier_profiles() :
     prefix="save"
+
     if os.path.isfile(prefix+"_profiles_fourier.txt") :
         lk_arr,pk_0_arr,pk_1_arr,pk_2_arr=np.loadtxt(prefix+"_profiles_fourier.txt",unpack=True)
         k_arr=10.**lk_arr
